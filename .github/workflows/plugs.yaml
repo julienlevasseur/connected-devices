@@ -1,0 +1,32 @@
+name: Plugs
+on: [push, pull_request]
+jobs:
+  build:
+    name: Test, Build & Push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+        id: go
+
+      - uses: actions/checkout@v1
+
+      - name: Test
+        run: |
+          cd plugs/
+          go get -d -v
+          go test -v ./...
+
+      - name: Build
+        run: |
+          cd plugs/
+          go get -d -v
+          go build
+
+      - name: Push
+        uses: actions/upload-artifact@v1
+        with:
+          name: plugs
+          path: plugs/plugs
